@@ -31,7 +31,7 @@ pipeline {
 		
 		echo Starting Spring Boot application...
 		cd path\\to\\your\\spring-boot-app
-		start "" java -jar target\\demo-0.0.1-SNAPSHOT.jar
+		start "" java -jar demo-0.0.1-SNAPSHOT.jar
 		'''
 	}
 }
