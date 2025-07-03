@@ -19,21 +19,22 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
-            steps {
-                script {
-                    // Kill any previous Java processes running the Spring Boot app
-                    bat '''
-                    for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9190') do taskkill /F /PID %%a
-                    '''
-
-                    // Run the application in the background
-                    bat '''
-                    start "" java -jar target\\demo-0.0.1-SNAPSHOT.jar > app.log 2>&1
-                    '''
-                }
-            }
-        }
+        stage('Kill and Restart Spring Boot App') {
+	steps {
+		bat '''
+		@echo off
+		echo Looking for process on port 9190...
+		for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9190 ^| findstr LISTENING') do (
+			echo Killing process ID %%a
+			taskkill /F /PID %%a
+		)
+		
+		echo Starting Spring Boot application...
+		cd path\\to\\your\\spring-boot-app
+		start "" java -jar target\\demo-0.0.1-SNAPSHOT.jar
+		'''
+	}
+}
     }
 
     post {
