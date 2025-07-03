@@ -23,10 +23,15 @@ pipeline {
 	steps {
 		bat '''
 		@echo off
-			
+		echo Looking for process on port 9190...
+		for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9190 ^| findstr LISTENING') do (
+			echo Killing process ID %%a
+			taskkill /F /PID %%a
+		)
+		
 		echo Starting Spring Boot application...
-		cd path\\to\\your\\spring-boot-app
-		start "" java -jar demo-0.0.1-SNAPSHOT.jar
+		
+		start "" java -jar target\\demo-0.0.1-SNAPSHOT.jar
 		'''
 	}
 }
